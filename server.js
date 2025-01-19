@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
-const { dbConnection } = require('./src/database/db')
+const router = require('./router')
+const dbConnection = require('./src/database/db')
 require('dotenv').config();
 
 const PORT = process.env.PORT
@@ -8,11 +9,19 @@ const PORT = process.env.PORT
 const app = express()
 app.use(cors())
 app.use(express.json())
-dbConnection()
+app.use('/api', router)
 
-app.get('/api', (req, res) => {
-    res.status(200).json({message: "Welcome to Edupath Backend"})
-})
+// Test database connection
+dbConnection
+  .authenticate()
+  .then(() => console.log('Database connected'))
+  .catch((err) => console.error('Database connection failed:', err));
+
+  // synchronize models
+dbConnection
+  .sync({ alter: true })
+  .then(() => console.log('Models synchronized'))
+  .catch((err) => console.error('Model synchronization failed:', err));
 
 app.listen(PORT, () => {
     console.log(`APP is listening on PORT: ${PORT}`)
