@@ -35,4 +35,8 @@ for windows user
 copy .env.example .env
 ```
 * Assign your database values to their corresponding environment variables and
-run `nodemon server.js`
+run `npm run dev` to start the development server.
+
+* login and registration run on `/api/auth/login` and `api/auth/register`. both runs on the `POST` method.
+
+The login takes `email` and `password` and returns `token` on successful response while the register takes `firstname` `lastname` `email` and `password` and also returns `token` upon successful response
