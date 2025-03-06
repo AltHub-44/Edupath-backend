@@ -1,6 +1,6 @@
 const User = require('../models/userModel')
-const { generateToken } = require('../../../common/jwt')
-const { error } = require('../../../common/helpers')
+const { generateToken } = require('../../../utils/jwt')
+const { error } = require('../../../utils/helpers')
 const bcrypt = require('bcrypt')
 
 const registerUser = async (firstname, lastname, email, password) => {
