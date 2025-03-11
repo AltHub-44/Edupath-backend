@@ -24,5 +24,5 @@ dbConnection
   .catch((err) => console.error('Model synchronization failed:', err));
 
 app.listen(PORT, () => {
-    console.log(`APP is listening on PORT: ${PORT}`)
+    console.log(`Server running on port http://localhost:${PORT}`)
 })

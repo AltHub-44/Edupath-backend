@@ -1,8 +1,10 @@
-//database connection
+const { Sequelize } = require('sequelize');
 require('dotenv').config();
-const { Sequelize } = require("sequelize");
-const { PG_DATABASE, PG_USERNAME, PG_PASSWORD } = process.env
 
-const dbConnection = new Sequelize(PG_DATABASE, PG_USERNAME, PG_PASSWORD, { dialect: 'postgres'})
+const dbConnection = new Sequelize(process.env.PG_DATABASE, process.env.PG_USERNAME, process.env.PG_PASSWORD, {
+    host: 'localhost',
+    dialect: 'postgres',
+    logging: false,
+});
 
-  module.exports = dbConnection;
+module.exports = dbConnection;

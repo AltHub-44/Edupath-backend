@@ -1,29 +1,21 @@
-const authServices = require('../services/authServices')
+const authService = require('../services/authServices');
 
-const createUser = async (req, res) => {
-    const { firstname, lastname, email, password } = req.body;
+const register = async (req, res) => {
     try {
-      const token = await authServices.registerUser(firstname, lastname, email, password);
-      res.status(201).json({ success: true, token });
-    } catch (err) {
-      console.log(err)
-      res.status(err.statusCode).json({ success: false, message: err.message });
+        const user = await authService.registerUser(req.body);
+        res.status(201).json(user);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
     }
-  };
+};
 
-  const loginUser = async (req, res) => {
-    const { email, password } = req.body;
-    try{
-      const token = await authServices.loginUser(email, password)
-      res.status(200).json({ success: true, token })
-
+const login = async (req, res) => {
+    try {
+        const token = await authService.loginUser(req.body.email, req.body.password);
+        res.status(200).json({ token });
+    } catch (error) {
+        res.status(401).json({ error: error.message });
     }
-    catch(err){
-      res.status(err.statusCode).json({ success: false, message: err.message})
-    }
-  }
+};
 
-  module.exports = {
-    createUser,
-    loginUser
-  }
+module.exports = { register, login };
