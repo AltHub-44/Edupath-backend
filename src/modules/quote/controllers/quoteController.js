@@ -1,13 +1,13 @@
-const fetchQuote = require('../services/quoteService')
+const { getAndSetCache } = require('../services/quoteService')
 const quoteController = async(req, res) => {
-
-    //check cache for quote
-
-    //if found, return cached qoute
-
-    //if not found, run fetchQuote and set response into cache then return result
-    
-    fetchQuote();
+    try{
+        const key = 'quote';
+        const response = await getAndSetCache(key);
+        res.status(200).json({ success: true, data: response });
+    }
+    catch(err){
+        res.status(err.status).json({ success: false, message: err.message })
+    }
 }
 
 module.exports = quoteController
