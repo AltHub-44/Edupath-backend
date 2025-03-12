@@ -8,7 +8,7 @@ const error = (code, message) => {
 
 //setting data to cache
 const setCache = async (key, data, expiry) => {
-    const response = await redisClient.set(key, JSON.stringify(data), { EX: `${expiry}`});
+    const response = await redisClient.set(key, JSON.stringify(data), expiry);
     return response
 
 }
@@ -18,8 +18,16 @@ const getCache = async (key) => {
     return JSON.parse(data);
 }
 
+const getSecondsUntilMidnight = () => {
+    const now = new Date();
+    const midnight = new Date(now);
+    midnight.setHours(23, 59, 59, 999);
+    return Math.floor((midnight - now) / 1000)
+}
+
 module.exports = {
     error,
     getCache,
-    setCache
+    setCache,
+    getSecondsUntilMidnight
 }

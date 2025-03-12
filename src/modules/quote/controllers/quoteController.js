@@ -6,7 +6,7 @@ const quoteController = async(req, res) => {
         res.status(200).json({ success: true, data: response });
     }
     catch(err){
-        res.status(err.status).json({ success: false, message: err.message })
+        res.status(err.statusCode).json({ success: false, message: err.message })
     }
 }
 

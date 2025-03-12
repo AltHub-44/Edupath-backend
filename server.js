@@ -4,7 +4,6 @@ const router = require('./router')
 const dbConnection = require('./src/database/db')
 const redisClient = require('./src/config/redisConfigs')
 require('dotenv').config();
-const { getCache, setCache } = require('./src/utils/helpers')
 
 const PORT = process.env.PORT
 
@@ -25,9 +24,7 @@ dbConnection
   .then(() => console.log('Models synchronized'))
   .catch((err) => console.error('Model synchronization failed:', err));
 
-  redisClient.connect()
-  getCache('hello');
-  // setCache('hello', 'this is just a sample cache', 24*60*60)
+redisClient.connect();
 
 app.listen(PORT, () => {
     console.log(`APP is listening on PORT: ${PORT}`)

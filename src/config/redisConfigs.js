@@ -8,7 +8,8 @@ const REDIS_URL = process.env.REDIS_URL
             console.log("redis connection successful");
         })
         client.on('error', () => {
-            console.log(error);
+            //log error in logger
+            console.log("Invalid Redis cache connection");
         })
     }
     catch(error){
