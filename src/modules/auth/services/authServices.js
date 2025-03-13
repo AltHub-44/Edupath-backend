@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt')
 
 const registerUser = async (userData) => {
     try {
-        const { firstName, lastName, email, password, role } = userData;
+        const { firstName, lastName, email, password } = userData;
 
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) {

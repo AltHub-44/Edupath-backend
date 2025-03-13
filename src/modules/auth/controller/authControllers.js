@@ -1,13 +1,15 @@
 const authServices = require('../services/authServices')
 
 const createUser = async (req, res) => {
-    const { firstname, lastname, email, password } = req.body;
+    
     try {
-      const token = await authServices.registerUser(firstname, lastname, email, password);
+      const { firstName, lastName, email, password } = req.body;
+
+      
+      const token = await authServices.registerUser({ firstName, lastName, email, password });
       res.status(201).json({ success: true, token });
     } catch (err) {
-      console.log(err)
-      res.status(err.statusCode).json({ success: false, message: err.message });
+      res.status(500).json({ success: false, message: err.message });
     }
   };
 
