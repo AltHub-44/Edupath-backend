@@ -19,7 +19,7 @@ const registerUser = async (userData) => {
             lastName,
             email,
             password: hashedPassword,
-            role
+  
         });
 
         return { message: 'User registered successfully', user: newUser };
