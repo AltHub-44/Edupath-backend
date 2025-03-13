@@ -3,19 +3,28 @@ const { generateToken } = require('../../../utils/jwt')
 const { error } = require('../../../utils/helpers')
 const bcrypt = require('bcrypt')
 
-const registerUser = async (firstname, lastname, email, password) => {
+const registerUser = async (userData) => {
     try {
-        const userExists = await User.findOne({ where: { email } });
-        if (userExists)error(409, 'User already exists');
-    
-        const encryptedPassword = await bcrypt.hash(password, 10);
-    
-        const newUser = await User.create({ firstname, lastname, email, password: encryptedPassword });
-        const payload = { id: newUser.id, firstname, lastname, email };
-    
-        return generateToken(payload);
-    } catch (err) {
-      throw error(err.statusCode, err.message || 'An unexpected error occurred');
+        const { firstName, lastName, email, password, role } = userData;
+
+        const existingUser = await User.findOne({ where: { email } });
+        if (existingUser) {
+            throw new Error('User already exists');
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = await User.create({
+            firstName,
+            lastName,
+            email,
+            password: hashedPassword,
+  
+        });
+
+        return { message: 'User registered successfully', user: newUser };
+    } catch (error) {
+        throw error;
     }
   };
   
