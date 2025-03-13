@@ -1,51 +1,43 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/userModel');
-require('dotenv').config();
+const User = require('../models/userModel')
+const { generateToken } = require('../../../utils/jwt')
+const { error } = require('../../../utils/helpers')
+const bcrypt = require('bcrypt')
 
-const registerUser = async (userData) => {
+const registerUser = async (firstname, lastname, email, password) => {
     try {
-        const { firstName, lastName, email, password, role } = userData;
-
-        const existingUser = await User.findOne({ where: { email } });
-        if (existingUser) {
-            throw new Error('User already exists');
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const newUser = await User.create({
-            firstName,
-            lastName,
-            email,
-            password: hashedPassword,
-            role
-        });
-
-        return { message: 'User registered successfully', user: newUser };
-    } catch (error) {
-        throw error;
+        const userExists = await User.findOne({ where: { email } });
+        if (userExists)error(409, 'User already exists');
+    
+        const encryptedPassword = await bcrypt.hash(password, 10);
+    
+        const newUser = await User.create({ firstname, lastname, email, password: encryptedPassword });
+        const payload = { id: newUser.id, firstname, lastname, email };
+    
+        return generateToken(payload);
+    } catch (err) {
+      throw error(err.statusCode, err.message || 'An unexpected error occurred');
     }
-};
+  };
+  
 
 const loginUser = async (email, password) => {
-    try {
-        const user = await User.findOne({ where: { email } });
-        if (!user) {
-            throw new Error('Invalid email or password');
-        }
+    try{
+        const user = await User.findOne({ where: { email }})
 
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            throw new Error('Invalid email or password');
-        }
+        if(!user)error(401, 'Invalid Credentials | email');
 
-        const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if(!isPasswordValid)error(401, 'Invalid Credentials(password)')
 
-        return { message: 'Login successful', token };
-    } catch (error) {
-        throw error;
+        return generateToken(user)
     }
-};
+    catch(err){
+        error(err.statusCode, err.message || 'An unexpected error occurred')
+    }
+   
+}
 
-module.exports = { registerUser, loginUser };
+module.exports = {
+    registerUser,
+    loginUser
+}
