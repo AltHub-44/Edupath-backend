@@ -8,11 +8,11 @@ const User = db.define(
       primaryKey: true,
       autoIncrement: true
     },
-    firstname: {
+    firstName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    lastname: {
+    lastName: {
         type: DataTypes.STRING,
         allowNull: false,
     },
