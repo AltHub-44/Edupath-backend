@@ -6,5 +6,7 @@ const authMiddleware = require('../../../middlewares/authMiddleware'); // Adjust
 // Onboarding Routes
 router.post('/', authMiddleware, onboardingController.completeOnboarding);
 router.get('/', authMiddleware, onboardingController.getOnboardingStatus);
+router.post("/complete", authMiddleware, onboardingController.completeOnboarding)
+router.get('/status', authMiddleware, onboardingController.getOnboardingStatus);
 
 module.exports = router;
