@@ -4,10 +4,9 @@ const User = db.define(
   'User',
   {
     id: {
-      type: DataTypes.UUID, 
-      defaultValue: DataTypes.UUIDV4, 
-      allowNull: false,
-      primaryKey: true,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true
     },
     firstName: {
       type: DataTypes.STRING,
@@ -26,7 +25,16 @@ const User = db.define(
         type: DataTypes.STRING,
         allowNull: false,
 
+    },
+    role: {
+      type: DataTypes.ENUM('student', 'mentor', 'parent'),
+      allowNull: true, // User can register without selecting a role initially
+    },
+  isOnboarded: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false 
     }
+
   },
 );
 
