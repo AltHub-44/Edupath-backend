@@ -28,7 +28,8 @@ const getAndSetCache = async (key) => {
         else{
             // if not present, fetch the api and save the response inthe cache
             const quote = await fetchQuote();
-            await setCache(key, JSON.stringify(quote), getSecondsUntilMidnight());
+            const expiry = getSecondsUntilMidnight();
+            await setCache(key, JSON.stringify(quote), { EX: expiry });
             return quote;
         }
     }
