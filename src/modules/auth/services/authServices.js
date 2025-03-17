@@ -64,7 +64,7 @@ const recoverPassword = async (email) => {
 
     console.log("reset token:", resetToken, "expiry:", resetTokenExpires)
     //send email to the recipient rather than logging the token
-    return (resetToken)
+    return ({ token: resetToken, email: user.email });
 }
 catch(err){
     error(500, err.message)
