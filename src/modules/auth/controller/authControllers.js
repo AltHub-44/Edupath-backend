@@ -25,7 +25,32 @@ const createUser = async (req, res) => {
     }
   }
 
+  const recoverPassword = async (req, res) => {
+    const { email } = req.body;
+    try{
+      const token = await authServices.recoverPassword(email)
+      //remove data from response object once email service is up and running
+      res.status(200).json({ success: true, message: 'Email Sent Successfully', data: token})
+    }
+    catch(err){
+      res.status(err.statusCode).json({ success: false, message: err.message })
+    }
+  }
+
+  const resetPassword = async (req, res) => {
+    const { token, password } = req.body;
+    try{
+      await authServices.resetPassword(token, password);
+      res.status(200).json({ success: true, message: 'Password updated successfully' });
+    }
+    catch(err){
+      res.status(err.statusCode).json({ success: false, message: err.message });
+    }
+  }
+
   module.exports = {
     createUser,
-    loginUser
+    loginUser,
+    recoverPassword,
+    resetPassword
   }
