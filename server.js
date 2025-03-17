@@ -4,6 +4,7 @@ const router = require('./router')
 const authRoutes = require('./src/modules/auth/routes/authRoutes');
 const onboardingRoutes = require('./src/modules/auth/routes/onboardingRoutes');
 const dbConnection = require('./src/database/db')
+const consumeQueues = require('./consumer');
 require('dotenv').config();
 
 const PORT = process.env.PORT
@@ -30,6 +31,9 @@ dbConnection
   .sync({ alter: true })
   .then(() => console.log('Models synchronized'))
   .catch((err) => console.error('Model synchronization failed:', err));
+
+  // connectRabbitMQ();
+  consumeQueues();
 
 app.listen(PORT, () => {
     console.log(`Server running on port http://localhost:${PORT}`)
