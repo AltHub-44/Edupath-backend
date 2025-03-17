@@ -12,19 +12,19 @@ const Onboarding = sequelize.define("onboarding", {
       },
         },
     level: {
-          type: DataTypes.ENUM("Primary", "Junior Secondary", "Senior Secondary"),
+          type: DataTypes.STRING,
           allowNull: false,
         },
       learningPreference: {
-          type: DataTypes.ENUM("Quizzes", "Videos", "P2P Learning", "Others"),
+          type: DataTypes.STRING ,
           allowNull: false,
         },
     challenges: {
-          type: DataTypes.ENUM("Mathematics", "English", "Physics", "Chemistry", "Biology", "Economics", "Government", "Others"),
+          type: DataTypes.STRING,
           allowNull: false,
         },
     goals: {
-          type: DataTypes.ENUM("Get into University", "Pass a particular exam", "Improve in studies", "Others"),
+          type: DataTypes.STRING,
           allowNull: false,
         },
 });
