@@ -27,7 +27,6 @@ const User = db.define(
     password: {
         type: DataTypes.STRING,
         allowNull: false,
-
     },
     role: {
       type: DataTypes.ENUM('student', 'mentor', 'parent'),
@@ -36,7 +35,15 @@ const User = db.define(
   isOnboarded: {
       type: DataTypes.BOOLEAN,
       defaultValue: false 
-    }
+    },
+    resetToken: {
+      type: DataTypes.STRING,
+      allowNull: true,
+  },
+  resetTokenExpires: {
+    type: DataTypes.DATE,
+    allowNull: true,
+}
 
   },
 );
