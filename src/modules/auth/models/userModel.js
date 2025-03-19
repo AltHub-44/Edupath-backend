@@ -33,6 +33,10 @@ const User = db.define(
       defaultValue: 'student',
       allowNull: false,
     },
+    isNew: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+    },
     isOnboarded: {
       type: DataTypes.BOOLEAN,
       defaultValue: false 
