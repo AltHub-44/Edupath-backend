@@ -30,9 +30,10 @@ const User = db.define(
     },
     role: {
       type: DataTypes.ENUM('student', 'mentor', 'parent'),
-      allowNull: true, // User can register without selecting a role initially
+      defaultValue: 'student',
+      allowNull: false,
     },
-  isOnboarded: {
+    isOnboarded: {
       type: DataTypes.BOOLEAN,
       defaultValue: false 
     },
