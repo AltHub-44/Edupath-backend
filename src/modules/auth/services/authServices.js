@@ -11,7 +11,8 @@ const registerUser = async (userData) => {
 
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) {
-            throw new Error('User already exists');
+            error(401, 'User already exists')
+            // throw new Error('User already exists');
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -25,8 +26,9 @@ const registerUser = async (userData) => {
         });
 
         return { message: 'User registered successfully', user: newUser };
-    } catch (error) {
-        throw error;
+    } catch (err) {
+        // throw error;
+        error(500, err.message)
     }
   };
   
@@ -35,15 +37,15 @@ const loginUser = async (email, password) => {
     try{
         const user = await User.findOne({ where: { email }})
 
-        if(!user)error(401, 'Invalid Credentials | email');
+        if(!user)error(401, 'Invalid Credentials');
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
-        if(!isPasswordValid)error(401, 'Invalid Credentials(password)')
+        if(!isPasswordValid)error(401, 'Invalid Credentials')
 
         return generateToken(user)
     }
     catch(err){
-        error(err.statusCode, err.message || 'An unexpected error occurred')
+        error(500, err.message || 'An unexpected error occurred')
     }
 }
 

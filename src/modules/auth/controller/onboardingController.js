@@ -7,34 +7,9 @@ const completeOnboarding = async (req, res) => {
         const userId = req.user.id;
         const { role, level, learningPreference, challenges, goals } = req.body;
 
-        // Validate role
-        const validRoles = ['student', 'mentor', 'parent'];
-        if (!role || !validRoles.includes(role)) {
-            return res.status(400).json({ error: "Invalid or missing role." });
-        }
-
-        // Validate level
-        const validLevels = ['Primary', 'Junior Secondary', 'Senior Secondary'];
-        if (!level || !validLevels.includes(level)) {
-            return res.status(400).json({ error: "Invalid or missing level." });
-        }
-
-        // Validate learning preference
-        const validPreferences = ['Quizzes', 'Videos', 'Peer-to-Peer Learning', 'Live Tutorials', 'Self-paced Learning'];
-        if (!learningPreference || !validPreferences.includes(learningPreference)) {
-            return res.status(400).json({ error: "Invalid or missing learning preference." });
-        }
-
-        // Validate challenges
-        const validChallenges = ['Mathematics', 'English Language', 'Physics', 'Chemistry', 'Biology', 'Economics', 'Government', 'History', 'Literature', 'Computer Science', 'Others'];
-        if (!challenges || !validChallenges.includes(challenges)) {
-            return res.status(400).json({ error: "Invalid or missing challenge." });
-        }
-
-        // Validate goals
-        const validGoals = ['Get into University', 'Pass WAEC/NECO/JAMB', 'Improve in a Subject', 'Score Higher in Tests', 'Become More Confident in Studies', 'Prepare for International Exams (SAT, TOEFL, IELTS)'];
-        if (!goals || !validGoals.includes(goals)) {
-            return res.status(400).json({ error: "Invalid or missing goal." });
+        // Ensure required fields are provided
+        if (!role || !level || !learningPreference || !challenges || !goals) {
+            return res.status(400).json({ error: "All fields are required." });
         }
 
         // Check if onboarding already exists
