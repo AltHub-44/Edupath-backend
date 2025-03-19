@@ -20,8 +20,9 @@ const createUser = async (req, res) => {
 
     res.status(201).json({ success: true, token });
   } catch (err) {
-    console.error("Registration error:", err);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    // console.error("Registration error:", err);
+    // res.status(500).json({ success: false, message: "Internal Server Error" });
+    res.status(err.statusCode).json({ success: false, message: err.message});
   }
 };
 
@@ -42,8 +43,8 @@ const loginUser = async (req, res) => {
 
     res.status(200).json({ success: true, token });
   } catch (err) {
-    console.error("Login error:", err);
-    res.status(err.statusCode || 500).json({ success: false, message: "Internal Server Error" });
+    // console.error("Login error:", err);
+    res.status(err.statusCode).json({ success: false, message: err.message || "Internal Server Error!"});
   }
 };
 
