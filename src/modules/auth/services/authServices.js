@@ -3,7 +3,6 @@ const { randomBytes } = require('node:crypto');
 const { generateToken } = require('../../../utils/jwt')
 const { error } = require('../../../utils/helpers')
 const bcrypt = require('bcrypt');
-const { token } = require('morgan');
 
 const registerUser = async (userData) => {
     try {
@@ -12,7 +11,6 @@ const registerUser = async (userData) => {
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) {
             error(401, 'User already exists')
-            // throw new Error('User already exists');
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -24,10 +22,10 @@ const registerUser = async (userData) => {
             password: hashedPassword,
   
         });
+        const token = await generateToken(newUser);
 
-        return { message: 'User registered successfully', user: newUser };
+        return (token);
     } catch (err) {
-        // throw error;
         error(500, err.message)
     }
   };
@@ -42,7 +40,8 @@ const loginUser = async (email, password) => {
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if(!isPasswordValid)error(401, 'Invalid Credentials')
 
-        return generateToken(user)
+        const token = await generateToken(user)
+        return token;
     }
     catch(err){
         error(500, err.message || 'An unexpected error occurred')

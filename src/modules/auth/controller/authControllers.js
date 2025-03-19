@@ -18,10 +18,8 @@ const createUser = async (req, res) => {
 
     const token = await authServices.registerUser({ firstName, lastName, email, password });
 
-    res.status(201).json({ success: true, token });
+    res.status(201).json({ success: true, message: 'User registration successful.', token });
   } catch (err) {
-    // console.error("Registration error:", err);
-    // res.status(500).json({ success: false, message: "Internal Server Error" });
     res.status(err.statusCode).json({ success: false, message: err.message});
   }
 };
