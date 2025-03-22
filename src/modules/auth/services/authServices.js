@@ -40,6 +40,11 @@ const loginUser = async (email, password) => {
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if(!isPasswordValid)error(401, 'Invalid Credentials')
 
+        //check if user account isNew istrue and set it to false
+        if(user.isNew){
+            await user.update({ isNew: false });
+        }
+
         const token = await generateToken(user)
         return token;
     }
