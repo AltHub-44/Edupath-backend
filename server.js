@@ -32,7 +32,6 @@ dbConnection
   .then(() => console.log('Models synchronized'))
   .catch((err) => console.error('Model synchronization failed:', err));
 
-  // connectRabbitMQ();
   consumeQueues();
 
 app.listen(PORT, () => {
