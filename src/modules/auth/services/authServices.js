@@ -100,9 +100,38 @@ const resetPassword = async (token, newPassword) => {
     }
 }
 
+const updatePassword = async (userId, oldPassword, newPassword) => {
+
+    //validate inputs
+    if(!oldPassword) error(400, 'Old password is required');
+    if(!newPassword) error(400, 'New password is required');
+
+    if(oldPassword === newPassword) error(400, 'Old password and new password cannot be  the same')
+
+    //fetch and confirm old password is correct
+    const user = await User.findByPk(userId)
+
+    if (!user) error(404, 'User not found');
+
+    // Check if old password matches
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+        error(401, "Incorrect old password");
+    }
+    //update the password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await user.update(
+        {
+            password: hashedPassword,
+            updateAt: new Date()
+     });
+     return true;
+}
+
 module.exports = {
     registerUser,
     loginUser,
     recoverPassword,
-    resetPassword
+    resetPassword,
+    updatePassword
 }
