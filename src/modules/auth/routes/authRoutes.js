@@ -16,4 +16,10 @@ router.post('/recover-password', validateRequest(recoverPasswordSchema), authCon
 router.post('/reset-password', validateRequest(resetPasswordSchema), authController.resetPassword);
 router.post('/change-password', authMiddleware, validateRequest(changePasswordSchema), authController.changePassword)
 
+router.get('/google', authController.googleAuth);
+router.get('/google/callback', authController.googleCallback);
+
+/* router.get('/facebook', authController.facebookAuth);
+router.get('/facebook/callback', authController.facebookCallback); */
+
 module.exports = router

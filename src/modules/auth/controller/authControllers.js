@@ -1,7 +1,14 @@
 const authServices = require("../services/authServices");
 const sendToQueue = require("../../../utils/queMailService");
-const frontendURL = process.env.FRONTEND_URL;
+const frontendURL = process.env.FRONTEND_URL || process.env.LOCAL_URL;
 const { registerSchema, loginSchema } = require("../validators/authValidator");
+const axios = require("axios");
+const User  = require("../../../modules/auth/models/userModel");
+const { generateToken } = require("../../../utils/jwt");
+
+
+
+
 
 const createUser = async (req, res) => {
   try {
@@ -68,10 +75,116 @@ const changePassword = async (req, res) => {
   }
 }
 
+// ✅ Google OAuth
+const googleAuth = (req, res) => {
+  const redirectUri = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${frontendURL}/api/auth/google/callback&response_type=code&scope=email profile`;
+  res.redirect(redirectUri);
+};
+
+// ✅ Google OAuth Callback
+const googleCallback = async (req, res) => {
+  try {
+    console.log("Google Callback Query Params:", req.query); // Log the received query params
+
+    const { code } = req.query;
+    if (!code) {
+      return res.status(400).json({ error: "Authorization code is missing" });
+    }
+
+    const tokenResponse = await axios.post('https://oauth2.googleapis.com/token', {
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      client_secret: process.env.GOOGLE_CLIENT_SECRET,
+      redirect_uri: `${frontendURL}/api/auth/google/callback`,
+      grant_type: 'authorization_code',
+      code,
+    });
+
+    console.log("Google Token Response:", tokenResponse.data);
+
+    const accessToken = tokenResponse.data.access_token;
+    const { data: userInfo } = await axios.get(`https://www.googleapis.com/oauth2/v2/userinfo?access_token=${accessToken}`);
+
+    console.log("Google User Info:", userInfo);
+
+    let user = await User.findOne({ where: { email: userInfo.email } });
+    if (!user) {
+      user = await User.create({
+        firstName: userInfo.given_name,
+        lastName: userInfo.family_name,
+        email: userInfo.email,
+        
+      });
+    }
+
+    const token = generateToken(user);
+    res.json({ success: true, token });
+  } catch (error) {
+    console.error("Google OAuth Error:", error.response ? error.response.data : error.message);
+    res.status(500).json({ error: "Google authentication failed", details: error.message });
+  }
+};
+
+/** 
+ ✅ Facebook OAuth
+const facebookAuth = (req, res) => {
+  const redirectUri = `https://www.facebook.com/v12.0/dialog/oauth?client_id=${process.env.FACEBOOK_CLIENT_ID}&redirect_uri=${backendURL}/api/auth/facebook/callback&scope=email,public_profile`;
+  res.redirect(redirectUri);
+};
+
+// ✅ Facebook OAuth Callback
+const facebookCallback = async (req, res) => {
+  try {
+    console.log("Facebook Callback Query Params:", req.query);
+
+    const { code } = req.query;
+    if (!code) {
+      return res.status(400).json({ error: "Authorization code is missing" });
+    }
+
+    // Exchange code for access token
+    const tokenResponse = await axios.get(`https://graph.facebook.com/v18.0/oauth/access_token`, {
+      params: {
+        client_id: process.env.FACEBOOK_APP_ID,
+        client_secret: process.env.FACEBOOK_APP_SECRET,
+        redirect_uri: `${frontendURL}/api/auth/facebook/callback`,
+        code,
+      },
+    });
+
+    console.log("Facebook Token Response:", tokenResponse.data);
+    const accessToken = tokenResponse.data.access_token;
+
+    // Fetch user data without email
+    const { data: userInfo } = await axios.get(`https://graph.facebook.com/me?fields=id,name,picture&access_token=${accessToken}`);
+
+    console.log("Facebook User Info:", userInfo);
+
+    let user = await User.findOne({ where: { facebookId: userInfo.id } });
+
+    if (!user) {
+      const [firstName, lastName] = userInfo.name.split(" ");
+      user = await User.create({ firstName, lastName, facebookId: userInfo.id });
+    }
+
+    const token = generateToken(user);
+    res.json({ success: true, token });
+  } catch (error) {
+    console.error("Facebook OAuth Error:", error.response ? error.response.data : error.message);
+    res.status(500).json({ error: "Facebook authentication failed", details: error.message });
+  }
+};
+**/
+
+
+
 module.exports = {
   createUser,
   loginUser,
   recoverPassword,
   resetPassword,
   changePassword,
+  googleAuth, 
+  googleCallback, 
+  // facebookAuth,
+  // facebookCallback 
 };
