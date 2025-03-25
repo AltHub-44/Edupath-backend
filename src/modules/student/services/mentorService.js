@@ -6,12 +6,16 @@ const getMentor = async (studentId) => {
     //get records from student mentor
     try{
         const studentMentor = await StudentMentor.findOne({ where: { studentId }})
+
+        if(!studentMentor || studentMentor == null) error(404, 'Mentor not yet assigned, request a new mentor')
+
         const mentor = studentMentor.mentorId
 
-        if(!mentor) error(404, 'Mentor not yet assigned, request a new mentor')
+        if(!mentor || mentor == null) error(404, 'Mentor not yet assigned, request a new mentor')
 
         //retrieve mentor information
         const newMentor = await User.findOne( { where: { id: mentor }});
+        if(!newMentor) error(404, 'Unable to fetch mentor profile, try again later')
 
         const mentorData = {
             firstname: newMentor.firstName,
