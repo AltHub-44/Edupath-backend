@@ -9,5 +9,6 @@ router.get('/', (req, res) => {
     console.log('Welcome to admin');
 })
 router.post('/create-mentor', validateRquest(addMentorSchema), adminController.createMentor)
+router.post('/assign-mentor', adminController.assignMentorToStudent)
 
 module.exports = router

@@ -13,6 +13,22 @@ const createMentor = async (req, res) => {
     }
 }
 
+const assignMentorToStudent = async (req, res) => {
+    try{
+        const { studentId } = req.body
+
+        await adminService.assignMentorToStudent(studentId);
+
+        res.status(201).json({ success: true, message: 'Mentor assigned to student successfully'});
+    }
+    catch(err){
+        res.status(err.statusCode).json({ success: false, message: err.message })
+    }
+    
+
+}
+
 module.exports = {
-    createMentor
+    createMentor,
+    assignMentorToStudent
 }
