@@ -6,7 +6,7 @@ const { registerSchema, loginSchema } = require("../validators/authValidator");
 const User = require("../../../modules/auth/models/userModel");
 const { generateToken } = require("../../../utils/jwt");
 
-// ✅ Google OAuth Client Setup
+// Google OAuth Client Setup
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
@@ -78,7 +78,7 @@ const changePassword = async (req, res) => {
   }
 }
 
-// ✅ Google OAuth
+//  Google OAuth
 const googleAuth = (req, res) => {
   const redirectUri = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${process.env.GOOGLE_REDIRECT_URI}&response_type=code&scope=email%20profile&access_type=offline&prompt=consent`;
 
@@ -86,7 +86,7 @@ const googleAuth = (req, res) => {
   res.redirect(redirectUri);
 };
 
-// ✅ Google OAuth Callback
+// Google OAuth Callback
 const googleCallback = async (req, res) => {
   try {
     console.log("Google Callback Query Params:", req.query);
@@ -98,11 +98,9 @@ const googleCallback = async (req, res) => {
 
     console.log("Google Auth Code:", code);
 
-    // ✅ Exchange code for access token
     const { tokens } = await client.getToken(code);
     console.log("Google Token Response:", tokens);
 
-    // ✅ Verify and extract user info
     const ticket = await client.verifyIdToken({
       idToken: tokens.id_token,
       audience: process.env.GOOGLE_CLIENT_ID,
@@ -121,7 +119,6 @@ const googleCallback = async (req, res) => {
       });
     }
 
-    // ✅ Generate and return JWT token
     const token = generateToken(user);
     res.json({ success: true, token });
 
@@ -131,56 +128,30 @@ const googleCallback = async (req, res) => {
   }
 };
 
-/** 
- ✅ Facebook OAuth
-const facebookAuth = (req, res) => {
-  const redirectUri = `https://www.facebook.com/v12.0/dialog/oauth?client_id=${process.env.FACEBOOK_CLIENT_ID}&redirect_uri=${backendURL}/api/auth/facebook/callback&scope=email,public_profile`;
-  res.redirect(redirectUri);
-};
 
-// ✅ Facebook OAuth Callback
-const facebookCallback = async (req, res) => {
+const getUserProfile = async (req, res) => {
   try {
-    console.log("Facebook Callback Query Params:", req.query);
+      const user = req.user; 
+      if (!user) {
+          return res.status(404).json({ success: false, message: "User not found" });
+      }
 
-    const { code } = req.query;
-    if (!code) {
-      return res.status(400).json({ error: "Authorization code is missing" });
-    }
-
-    // Exchange code for access token
-    const tokenResponse = await axios.get(`https://graph.facebook.com/v18.0/oauth/access_token`, {
-      params: {
-        client_id: process.env.FACEBOOK_APP_ID,
-        client_secret: process.env.FACEBOOK_APP_SECRET,
-        redirect_uri: `${frontendURL}/api/auth/facebook/callback`,
-        code,
-      },
-    });
-
-    console.log("Facebook Token Response:", tokenResponse.data);
-    const accessToken = tokenResponse.data.access_token;
-
-    // Fetch user data without email
-    const { data: userInfo } = await axios.get(`https://graph.facebook.com/me?fields=id,name,picture&access_token=${accessToken}`);
-
-    console.log("Facebook User Info:", userInfo);
-
-    let user = await User.findOne({ where: { facebookId: userInfo.id } });
-
-    if (!user) {
-      const [firstName, lastName] = userInfo.name.split(" ");
-      user = await User.create({ firstName, lastName, facebookId: userInfo.id });
-    }
-
-    const token = generateToken(user);
-    res.json({ success: true, token });
+      res.json({
+          success: true,
+          user: {
+              id: user.id,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              role: user.role,
+              isNew: user.isNew,
+              isOnboarded: user.isOnboarded
+          }
+      });
   } catch (error) {
-    console.error("Facebook OAuth Error:", error.response ? error.response.data : error.message);
-    res.status(500).json({ error: "Facebook authentication failed", details: error.message });
+      res.status(500).json({ success: false, message: "Server error" });
   }
 };
-**/
 
 
 
@@ -192,6 +163,6 @@ module.exports = {
   changePassword,
   googleAuth, 
   googleCallback, 
-  // facebookAuth,
-  // facebookCallback 
+  getUserProfile,
+ 
 };

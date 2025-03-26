@@ -7,6 +7,7 @@ const { registerSchema,
      recoverPasswordSchema, 
      resetPasswordSchema } = require('../validators/authValidator');
 const authMiddleware = require('../../../middlewares/authMiddleware');
+const getUserProfile = require('../controller/authControllers');
 
 const router = express.Router();
 
@@ -18,6 +19,8 @@ router.post('/change-password', authMiddleware, validateRequest(changePasswordSc
 
 router.get('/google', authController.googleAuth);
 router.get('/google/callback', authController.googleCallback);
+router.get('/user/profile', authMiddleware, authController.getUserProfile);
+
 
 /* router.get('/facebook', authController.facebookAuth);
 router.get('/facebook/callback', authController.facebookCallback); */
