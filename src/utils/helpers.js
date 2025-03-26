@@ -26,7 +26,6 @@ const getSecondsUntilMidnight = () => {
     return Math.floor((midnight - now) / 1000)
 }
 
-
 const generateRandomPassword = () => {
     const minLength = 6;
     const maxLength = 30;
