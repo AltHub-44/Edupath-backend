@@ -1,5 +1,6 @@
 //helper functions and utils
 const redisClient = require('../config/redisConfigs')
+const { randomBytes } = require("crypto");
 const error = (code, message) => {
     const error = new Error(message)
     error.statusCode = code
@@ -25,9 +26,20 @@ const getSecondsUntilMidnight = () => {
     return Math.floor((midnight - now) / 1000)
 }
 
+
+const generateRandomPassword = () => {
+    const minLength = 6;
+    const maxLength = 30;
+    const randomLength = Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength; 
+    return randomBytes(randomLength).toString("hex").slice(0, randomLength);
+};
+
+
+
 module.exports = {
     error,
     getCache,
     setCache,
-    getSecondsUntilMidnight
+    getSecondsUntilMidnight,
+    generateRandomPassword
 }

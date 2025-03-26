@@ -6,6 +6,7 @@ const { registerSchema, loginSchema } = require("../validators/authValidator");
 const User = require("../../../modules/auth/models/userModel");
 const { generateToken } = require("../../../utils/jwt");
 
+
 // Google OAuth Client Setup
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
@@ -82,51 +83,35 @@ const changePassword = async (req, res) => {
 const googleAuth = (req, res) => {
   const redirectUri = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${process.env.GOOGLE_REDIRECT_URI}&response_type=code&scope=email%20profile&access_type=offline&prompt=consent`;
 
-  console.log("Redirecting to Google OAuth:", redirectUri);
+
   res.redirect(redirectUri);
 };
 
 // Google OAuth Callback
 const googleCallback = async (req, res) => {
-  try {
-    console.log("Google Callback Query Params:", req.query);
+    try {
+        const { code } = req.query;
+        if (!code) {
+            return res.status(400).json({ error: "Authorization code is missing" });
+        }
 
-    const { code } = req.query;
-    if (!code) {
-      return res.status(400).json({ error: "Authorization code is missing" });
+        const { tokens } = await client.getToken(code);
+        const ticket = await client.verifyIdToken({
+            idToken: tokens.id_token,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        const payload = ticket.getPayload();
+
+        const token = await authServices.googleAuthService(payload);
+
+        res.json({ success: true, token });
+    } catch (error) {
+        console.error("Google OAuth Error:", error.message);
+        res.status(500).json({ error: "Google authentication failed", details: error.message });
     }
-
-    console.log("Google Auth Code:", code);
-
-    const { tokens } = await client.getToken(code);
-    console.log("Google Token Response:", tokens);
-
-    const ticket = await client.verifyIdToken({
-      idToken: tokens.id_token,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
-
-    const payload = ticket.getPayload();
-    console.log("Google User Info:", payload);
-
-    let user = await User.findOne({ where: { email: payload.email } });
-
-    if (!user) {
-      user = await User.create({
-        firstName: payload.given_name,
-        lastName: payload.family_name,
-        email: payload.email,
-      });
-    }
-
-    const token = generateToken(user);
-    res.json({ success: true, token });
-
-  } catch (error) {
-    console.error("Google OAuth Error:", error.message);
-    res.status(500).json({ error: "Google authentication failed", details: error.message });
-  }
 };
+
 
 
 const getUserProfile = async (req, res) => {

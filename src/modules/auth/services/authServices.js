@@ -3,6 +3,7 @@ const { randomBytes } = require('node:crypto');
 const { generateToken } = require('../../../utils/jwt')
 const { error } = require('../../../utils/helpers')
 const bcrypt = require('bcrypt');
+const { generateRandomPassword } = require("../../../utils/helpers");
 
 const registerUser = async (userData) => {
     try {
@@ -128,10 +129,34 @@ const updatePassword = async (userId, oldPassword, newPassword) => {
      return true;
 }
 
+const googleAuthService = async (payload) => {
+    try {
+        let user = await User.findOne({ where: { email: payload.email } });
+
+        if (!user) {
+                user = await User.create({
+                firstName: payload.given_name,
+                lastName: payload.family_name,
+                email: payload.email,
+                password: generateRandomPassword(),
+                
+            });
+
+            console.log("Generated Password:", generateRandomPassword());
+        }
+
+        const token = generateToken(user);
+        return token;
+    } catch (err) {
+        error(500, err.message || "Google authentication failed");
+    }
+};
+
 module.exports = {
     registerUser,
     loginUser,
     recoverPassword,
     resetPassword,
-    updatePassword
+    updatePassword,
+    googleAuthService,
 }
