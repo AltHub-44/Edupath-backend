@@ -13,20 +13,18 @@ const client = new OAuth2Client(
   process.env.GOOGLE_REDIRECT_URI
 );
 
-// ✅ User Registration
 const createUser = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
 
     const token = await authServices.registerUser({ firstName, lastName, email, password });
 
-    res.status(201).json({ success: true, message: "User registration successful.", token });
+    res.status(201).json({ success: true, message: 'User registration successful.', token });
   } catch (err) {
-    res.status(err.statusCode || 500).json({ success: false, message: err.message });
+    res.status(err.statusCode).json({ success: false, message: err.message});
   }
 };
 
-// ✅ User Login
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -35,17 +33,16 @@ const loginUser = async (req, res) => {
 
     res.status(200).json({ success: true, token });
   } catch (err) {
-    res.status(err.statusCode || 500).json({ success: false, message: err.message || "Internal Server Error!" });
+    res.status(err.statusCode).json({ success: false, message: err.message || "Internal Server Error!"});
   }
 };
 
-// ✅ Password Recovery
 const recoverPassword = async (req, res) => {
   const { email } = req.body;
   try {
     const response = await authServices.recoverPassword(email);
 
-    // Send email with reset link
+    // Send email using response data
     const url = `${frontendURL}/reset-password?token=${response.token}`;
     const emailData = {
       token: url,
@@ -55,32 +52,31 @@ const recoverPassword = async (req, res) => {
 
     res.status(200).json({ success: true, message: "Email Sent Successfully" });
   } catch (err) {
-    res.status(err.statusCode || 500).json({ success: false, message: err.message });
+    res.status(err.statusCode).json({ success: false, message: err.message });
   }
 };
 
-// ✅ Password Reset
 const resetPassword = async (req, res) => {
   const { token, password } = req.body;
   try {
     await authServices.resetPassword(token, password);
     res.status(200).json({ success: true, message: "Password updated successfully" });
   } catch (err) {
-    res.status(err.statusCode || 500).json({ success: false, message: err.message });
+    res.status(err.statusCode).json({ success: false, message: err.message });
   }
 };
 
-// ✅ Change Password
 const changePassword = async (req, res) => {
   const { oldPassword, newPassword } = req.body;
   const userId = req.user.id;
-  try {
-    await authServices.updatePassword(userId, oldPassword, newPassword);
-    res.status(200).json({ success: true, message: "Password updated successfully!" });
-  } catch (err) {
-    res.status(err.statusCode || 500).json({ success: false, message: err.message });
+  try{
+      await authServices.updatePassword(userId, oldPassword, newPassword);
+      res.status(200,).json({ success: true, message: "Password updated successfully!" });
   }
-};
+  catch(err){
+    res.status(err.statusCode).json({ success:false, message: err.message });
+  }
+}
 
 // ✅ Google OAuth
 const googleAuth = (req, res) => {
