@@ -5,7 +5,7 @@ const createMentor = async (req, res) => {
 
         const response = await adminService.createMentor(firstName, lastName, email, password)
 
-        res.status(201).json({ success: true, message: 'Mentor created successfully', data: response});
+        res.status(201).json({ success: true, message: 'Mentor created successfully', response});
 
     }
     catch(err){
@@ -17,15 +17,13 @@ const assignMentorToStudent = async (req, res) => {
     try{
         const { studentId } = req.body
 
-        await adminService.assignMentorToStudent(studentId);
+       const mentor = await adminService.assignMentorToStudent(studentId);
 
-        res.status(201).json({ success: true, message: 'Mentor assigned to student successfully'});
+        res.status(201).json({ success: true, message: 'Mentor assigned to student successfully', mentor});
     }
     catch(err){
         res.status(err.statusCode).json({ success: false, message: err.message })
     }
-    
-
 }
 
 module.exports = {

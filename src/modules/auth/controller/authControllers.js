@@ -1,7 +1,6 @@
 const authServices = require("../services/authServices");
 const sendToQueue = require("../../../utils/queMailService");
 const frontendURL = process.env.FRONTEND_URL;
-const { registerSchema, loginSchema } = require("../validators/authValidator");
 
 const createUser = async (req, res) => {
   try {
@@ -21,9 +20,9 @@ const loginUser = async (req, res) => {
 
     const token = await authServices.loginUser(email, password);
 
-    res.status(200).json({ success: true, token });
+    res.status(200).json({ success: true, message: 'Welcome back', token });
   } catch (err) {
-    res.status(err.statusCode).json({ success: false, message: err.message || "Internal Server Error!"});
+    res.status(err.statusCode).json({ success: false, message: err.message });
   }
 };
 
