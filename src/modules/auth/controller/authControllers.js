@@ -2,9 +2,6 @@ const { OAuth2Client } = require("google-auth-library");
 const authServices = require("../services/authServices");
 const sendToQueue = require("../../../utils/queMailService");
 const frontendURL = process.env.FRONTEND_URL || process.env.LOCAL_URL;
-const User = require("../../../modules/auth/models/userModel");
-const { generateToken } = require("../../../utils/jwt");
-
 
 // Google OAuth Client Setup
 const client = new OAuth2Client(
