@@ -41,6 +41,14 @@ const User = db.define(
       type: DataTypes.BOOLEAN,
       defaultValue: false 
     },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+    },
+    isSuspended: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
     resetToken: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -49,7 +57,6 @@ const User = db.define(
     type: DataTypes.DATE,
     allowNull: true,
 }
-
   },
 );
 
