@@ -26,7 +26,7 @@ const User = db.define(
     },
     password: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     role: {
       type: DataTypes.ENUM('student', 'mentor', 'parent'),
@@ -56,7 +56,17 @@ const User = db.define(
   resetTokenExpires: {
     type: DataTypes.DATE,
     allowNull: true,
-}
+  },
+
+ /*  googleId: { 
+    type: DataTypes.STRING, 
+    allowNull: true 
+  }, */
+   /*  facebookId: { 
+      type: DataTypes.STRING, 
+      allowNull: true 
+  },
+ */
   },
 );
 
