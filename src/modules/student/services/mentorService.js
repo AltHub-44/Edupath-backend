@@ -1,5 +1,5 @@
-const User = require('../../auth/models/userModel')
-const StudentMentor = require('../models/mentorModel')
+const User = require('../../../models/userModel')
+const StudentMentor = require('../../../models/mentorModel')
 const { error } = require('../../../utils/helpers')
 
 const getMentor = async (studentId) => {

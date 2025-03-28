@@ -1,5 +1,5 @@
-const User = require("../models/userModel");
-const Onboarding = require("../models/onboarding");
+const User = require("../../../models/mentorModel");
+const Onboarding = require("../../../models/onboarding");
 
 // Complete Onboarding
 const completeOnboarding = async (req, res) => {

@@ -1,4 +1,4 @@
-const User = require('../models/userModel')
+const User = require('../../../models/userModel')
 const { randomBytes } = require('node:crypto');
 const { generateToken } = require('../../../utils/jwt')
 const { error } = require('../../../utils/helpers')

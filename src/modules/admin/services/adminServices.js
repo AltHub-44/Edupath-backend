@@ -1,6 +1,6 @@
 const { error } = require('../../../utils/helpers')
-const User = require('../../auth/models/userModel');
-const StudentMentor = require('../../student/models/mentorModel')
+const User = require('../../../models/userModel');
+const StudentMentor = require('../../../models/mentorModel')
 const bcrypt = require('bcrypt');
 const { generateToken } = require('../../../utils/jwt');
 
