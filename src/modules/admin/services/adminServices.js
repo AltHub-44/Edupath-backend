@@ -25,37 +25,28 @@ const createMentor = async (firstName, lastName, email, password) => {
 
         return (token);
     } catch (err) {
-        error(500, err.message)
+        error(err.statusCode || 500, err.message || 'Internal server error')
     }
 }
 
 const assignMentorToStudent = async (studentId) => {
     try {
-        // const mentor = await User.findOne({
-        //     where: { role: "mentor" },
-        //     order: sequelize.literal("RANDOM()"),
-        // });
 
         const mentors = await User.findAll({ where: { role: "mentor" } });
 
         if (mentors.length === 0) error(404, 'No mentors available.');
     
-        // Pick a random mentor using JavaScript
+        // Pick a random mentor
         const randomMentor = mentors[Math.floor(Math.random() * mentors.length)];
     
-        // return randomMentor.id;
-
-        // if (!mentor) error(404, 'No mentors available.')
-
-        await StudentMentor.create({
+        newMentor = await StudentMentor.create({
              mentorId: randomMentor.id,
              studentId: studentId
             });
 
-        // res.status(200).json({ message: "Mentor assigned successfully!" });
-        return
+        return newMentor;
     } catch (err) {
-        error(500, err.message);
+        error(err.statusCode || 500, err.message || 'Internal server error');
     }
 }
 module.exports = {
