@@ -62,18 +62,69 @@ const addResource = async ({ title, description, tags, url, type, category_id, s
 }
 
 //get resources
-const getResources = async () => {
+const getResources = async ({ search, type, state, categoryId, page = 1, perPage =  10 }) => {
     try{
-        const resources = await Resource.findAll({
-            include: [{
+        const where = {}
+        if(search){
+            where[Op.or] = [
+                { title: { [Op.iLike]: `%${search}%` } },
+                { description: { [Op.iLike]: `%${search}%` } }
+            ]
+        }
+        if(type) where.type = type;
+        if(state) where.state = state;
+        if(categoryId) where.categoryId = categoryId 
+
+    const sortOption = [
+            ['isFeatured', 'DESC'],  // Featured properties come first
+            ['createdAt', 'DESC']     // Then sort by newest first
+          ];
+
+          // Pagination
+    const limit = parseInt(perPage, 10);
+    const offset = (parseInt(page, 10) - 1) * limit;
+
+    const resources = await Resource.findAndCountAll({
+        where,
+        include: [
+            {
                 model: ResourceCategory,
                 as: "category",
-                attributes: ["id", "name"] // Ensure only relevant attributes are fetched
-        }]
-        });
-        if(!resources) error(404, 'No resource found');
+                attributes: ["id", "name"]
+            }
+        ],
+        order: sortOption,
+        limit,
+        offset,
+    });
 
-        return resources;
+    if (!resources.rows.length) {
+        error(404, 'No resource found');
+      }
+  
+      const response =  {
+        total: resources.count,
+        page: parseInt(page, 10),
+        perPage: limit,
+        totalPages: Math.ceil(resources.count / limit),
+        resources: resources.rows,
+      };
+
+      return response
+
+
+
+
+        // const resources = await Resource.findAll({
+        //     include: [{
+        //         model: ResourceCategory,
+        //         as: "category",
+        //         attributes: ["id", "name"] // Ensure only relevant attributes are fetched
+        // }]
+        // });
+        // if(!resources) error(404, 'No resource found');
+
+        // return resources;
     }
     catch(err){
         error(err.statusCode || 500, err.message || 'Internal server error');

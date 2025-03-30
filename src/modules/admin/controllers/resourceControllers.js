@@ -38,7 +38,8 @@ const addResource = async (req, res) =>{
 
 const getAllResources = async (req, res) => {
     try {
-        const resources = await resourceServices.getResources()
+        const { search, type, state, categoryId } = req.params
+        const resources = await resourceServices.getResources({ search, type, state, categoryId })
 
         res.status(200).json({ success: true, message: "all resource fetched successfully", data: resources})
     } catch (err) {
