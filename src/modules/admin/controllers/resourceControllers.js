@@ -1,4 +1,5 @@
 const resourceServices = require('../services/resourceServices')
+//add resource category
 const addNew = async (req, res) => {
     const { name, description } = req.body
     try{
@@ -11,6 +12,7 @@ const addNew = async (req, res) => {
 
 }
 
+//get all category
 const getAll = async (req, res) => {
     try{
         const allCategories = await resourceServices.getCategory()
@@ -24,6 +26,7 @@ const getAll = async (req, res) => {
     }
 }
 
+//add resources
 const addResource = async (req, res) =>{
     const { title, description, tags, category_id, type, url, isFeatured, state } = req.body;
     try{
@@ -36,6 +39,7 @@ const addResource = async (req, res) =>{
 
 }
 
+//get all resources with search and pagination
 const getAllResources = async (req, res) => {
     try {
         const { search, type, state, categoryId } = req.params
@@ -47,6 +51,20 @@ const getAllResources = async (req, res) => {
     }
 }
 
+//get Single resource
+const getSingleResource = async(req, res) => {
+    try{
+        const id = req.params.id;
+        const resource = await resourceServices.getSingleResource(id);
+
+        res.status(200).json( { success: true, message: 'Resource fetched successfully', data: resource });
+    }
+    catch(err){
+        res.status(err.statusCode).json({ success: false, message: err.message });
+    }
+} 
+
+//delete resource
 const deleteResource = async (req, res) => {
     const id = req.params.id;
     try{
@@ -64,6 +82,7 @@ module.exports = {
     getAll,
     addResource,
     getAllResources,
+    getSingleResource,
     deleteResource
 
 }

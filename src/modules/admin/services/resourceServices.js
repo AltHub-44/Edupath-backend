@@ -117,6 +117,29 @@ const getResources = async ({ search, type, state, categoryId, page = 1, perPage
     
 }
 
+//get single resource
+const getSingleResource = async (id) => {
+    try{
+        const resource = await Resource.findOne({ 
+            where: { id },
+            include: [
+                {
+                    model: ResourceCategory,
+                    as: "category",
+                    attributes: ["id", "name"]
+                }
+        ],
+    });
+
+        if(!resource || resource === null)error(404, 'Resource Not Found!');
+
+        return resource;
+    }
+    catch(err){
+        error(err.statusCode || 500, err.message);
+    }
+}
+
 //update resources
 
 //delete resources
@@ -144,7 +167,7 @@ module.exports = {
     getCategory,
     addResource,
     getResources,
-    // getSingleResources 
+    getSingleResource,
     // updateResources,
     deleteResources
 }

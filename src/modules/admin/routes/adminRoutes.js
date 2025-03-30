@@ -23,6 +23,7 @@ router.post('/resources/add-category', resourceController.addNew)
 router.get('/resources/getall-category', resourceController.getAll)
 router.post('/resource', resourceController.addResource)
 router.get('/resource', resourceController.getAllResources)
+router.get('/resource/:id', resourceController.getSingleResource)
 router.delete('/resource/:id', resourceController.deleteResource)
 
 module.exports = router
