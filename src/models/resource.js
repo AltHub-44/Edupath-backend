@@ -12,7 +12,7 @@ const Resource = db.define(
     title: DataTypes.STRING,
     description: DataTypes.TEXT,
     type: {
-        type: DataTypes.ENUM("video", "audio", "pdf"),
+        type: DataTypes.ENUM("video", "video series", "pdf", "document"),
         allowNull: false,
     },
     url: DataTypes.TEXT, // Cloudinary or S3 link
@@ -35,6 +35,11 @@ const Resource = db.define(
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false,
+    },
+    size: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 1,
     },
     categoryId: {
       type: DataTypes.INTEGER,

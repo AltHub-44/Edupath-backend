@@ -141,6 +141,38 @@ const getSingleResource = async (id) => {
 }
 
 //update resources
+const updateResource = async ({ id, title, description, type,
+    url, tags, state, isFeatured, size, categoryId }) => {
+    try{
+        const query = {};
+        if(title) query.title = title;
+        if(description) query.description = description;
+        if(type) query.type = type;
+        if(url) query.url = url;
+        if(tags) query.tags = tags;
+        if(state) query.state = state;
+        if(size) query.size = size;
+        // if(isFeatured) query.isFeatured = isFeatured;
+        if (typeof isFeatured !== "undefined") query.isFeatured = isFeatured;
+        if(categoryId) query.categoryId = categoryId
+
+        query.updatedAt = new Date();
+
+        const resource = await Resource.findOne({ where: { id }});
+
+        if(!resource || resource === null)error(404, 'Resource Not Found!');
+
+        const updatedResource = await Resource.update(query, {
+        where: { id },
+        returning: true,
+        });
+
+        return updatedResource
+    }
+    catch(err){
+        error(err.statusCode || 500, err.message || "Internal server error");
+    }
+}
 
 //delete resources
 
@@ -168,6 +200,6 @@ module.exports = {
     addResource,
     getResources,
     getSingleResource,
-    // updateResources,
+    updateResource,
     deleteResources
 }

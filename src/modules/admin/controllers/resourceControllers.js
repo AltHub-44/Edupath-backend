@@ -64,6 +64,25 @@ const getSingleResource = async(req, res) => {
     }
 } 
 
+//update resource
+const updateSingleResource = async (req, res) => {
+    try{
+        const id = req.params.id;
+        const { title, description, type,
+            url, tags, state, isFeatured, size, categoryId } = req.body
+
+         const updatedResource = await resourceServices.updateResource({ id, title, description, type,
+            url, tags, state, isFeatured, size, categoryId });
+        
+        res.status(200).json({ success: true, message: 'property updated successfully', data: updatedResource });
+
+    }
+    catch(err){
+        res.status(err.statusCode).json({ success: false, message: err.message });
+    }
+}
+
+
 //delete resource
 const deleteResource = async (req, res) => {
     const id = req.params.id;
@@ -83,6 +102,7 @@ module.exports = {
     addResource,
     getAllResources,
     getSingleResource,
+    updateSingleResource,
     deleteResource
 
 }
