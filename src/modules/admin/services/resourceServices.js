@@ -109,22 +109,7 @@ const getResources = async ({ search, type, state, categoryId, page = 1, perPage
         totalPages: Math.ceil(resources.count / limit),
         resources: resources.rows,
       };
-
       return response
-
-
-
-
-        // const resources = await Resource.findAll({
-        //     include: [{
-        //         model: ResourceCategory,
-        //         as: "category",
-        //         attributes: ["id", "name"] // Ensure only relevant attributes are fetched
-        // }]
-        // });
-        // if(!resources) error(404, 'No resource found');
-
-        // return resources;
     }
     catch(err){
         error(err.statusCode || 500, err.message || 'Internal server error');
@@ -136,6 +121,24 @@ const getResources = async ({ search, type, state, categoryId, page = 1, perPage
 
 //delete resources
 
+const deleteResources = async (id) => {
+    try{
+         //check if item is in the database
+        const resource = await Resource.findOne({ where: { id }});
+
+        if(!resource || resource === null)error(404, 'Resource Not Found!');
+
+        const deletedData = await Resource.destroy({ where: { id }});
+
+        if(!deletedData)error(500, 'Internal Server Error');
+
+        return
+    }
+    catch(err){
+        error(err.statusCode || 500, err.message || 'Internal Server Error!');
+    }
+}
+
 module.exports = {
     createCategory,
     getCategory,
@@ -143,5 +146,5 @@ module.exports = {
     getResources,
     // getSingleResources 
     // updateResources,
-    // deleteResources
+    deleteResources
 }

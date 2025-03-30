@@ -47,9 +47,23 @@ const getAllResources = async (req, res) => {
     }
 }
 
+const deleteResource = async (req, res) => {
+    const id = req.params.id;
+    try{
+         await resourceServices.deleteResources(id);
+
+        res.status(200).json({ success: true, messsage: 'Item deleted successfully' });
+    }
+    catch(err){
+        res.status(err.statusCode).json({ success: false, message: err.message });
+    }
+}
+
 module.exports = {
     addNew,
     getAll,
     addResource,
-    getAllResources
+    getAllResources,
+    deleteResource
+
 }
