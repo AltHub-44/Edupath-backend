@@ -1,5 +1,6 @@
 const db = require('../database/db');
 const { DataTypes } = require('sequelize')
+const ResourceCategory = require('./resourceCategory');
 const Resource = db.define(
   'Resource',
   {
@@ -24,8 +25,29 @@ const Resource = db.define(
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
         defaultValue: [],
-    }
+    },
+    state: {
+      type: DataTypes.ENUM("active", "inactive", "draft"),
+      allowNull: false,
+      defaultValue: 'draft',
+    },
+    isFeatured: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    categoryId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'ResourceCategories',
+        key: 'id'
+      }
+    },
   },
 );
+
+// Define the association
+Resource.belongsTo(ResourceCategory, { foreignKey: "categoryId", as: "category" });
 
 module.exports = Resource;
