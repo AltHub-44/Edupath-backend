@@ -4,6 +4,7 @@ const validateRquest = require('../../../middlewares/validateRquest')
 const { addMentorSchema } = require('../validators/adminValidator')
 const analyticsController = require('../controllers/analyticsControllers')
 const resourceController = require('../controllers/resourceControllers')
+const { getResourcesSchema, updateResourceSchema } = require('../validators/resourceValidator')
 
 const router = express.Router();
 
@@ -22,9 +23,9 @@ router.get('/analytics/all-mentors', analyticsController.totalMentor)
 router.post('/resources/add-category', resourceController.addNew)
 router.get('/resources/getall-category', resourceController.getAll)
 router.post('/resource', resourceController.addResource)
-router.get('/resource', resourceController.getAllResources)
+router.get('/resource', validateRquest(getResourcesSchema),resourceController.getAllResources)
 router.get('/resource/:id', resourceController.getSingleResource)
-router.put('/resource/:id', resourceController.updateSingleResource)
+router.put('/resource/:id', validateRquest(updateResourceSchema), resourceController.updateSingleResource)
 router.delete('/resource/:id', resourceController.deleteResource)
 
 module.exports = router
