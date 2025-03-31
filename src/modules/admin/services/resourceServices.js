@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const ResourceCategory = require('../../../models/resourceCategory')
 const Resource = require('../../../models/resource')
 const { error } = require('../../../utils/helpers')
@@ -75,41 +76,41 @@ const getResources = async ({ search, type, state, categoryId, page = 1, perPage
         if(state) where.state = state;
         if(categoryId) where.categoryId = categoryId 
 
-    const sortOption = [
-            ['isFeatured', 'DESC'],  // Featured properties come first
-            ['createdAt', 'DESC']     // Then sort by newest first
-          ];
+        const sortOption = [
+                ['isFeatured', 'DESC'],  // Featured properties come first
+                ['createdAt', 'DESC']     // Then sort by newest first
+            ];
 
           // Pagination
-    const limit = parseInt(perPage, 10);
-    const offset = (parseInt(page, 10) - 1) * limit;
+        const limit = parseInt(perPage, 10);
+        const offset = (parseInt(page, 10) - 1) * limit;
 
-    const resources = await Resource.findAndCountAll({
-        where,
-        include: [
-            {
-                model: ResourceCategory,
-                as: "category",
-                attributes: ["id", "name"]
-            }
-        ],
-        order: sortOption,
-        limit,
-        offset,
-    });
+        const resources = await Resource.findAndCountAll({
+            where,
+            include: [
+                {
+                    model: ResourceCategory,
+                    as: "category",
+                    attributes: ["id", "name"]
+                }
+            ],
+            order: sortOption,
+            limit,
+            offset,
+        });
 
-    if (!resources.rows.length) {
-        error(404, 'No resource found');
-      }
+        if (!resources.rows.length) {
+            error(404, 'No resource found');
+        }
   
-      const response =  {
-        total: resources.count,
-        page: parseInt(page, 10),
-        perPage: limit,
-        totalPages: Math.ceil(resources.count / limit),
-        resources: resources.rows,
-      };
-      return response
+        const response =  {
+            total: resources.count,
+            page: parseInt(page, 10),
+            perPage: limit,
+            totalPages: Math.ceil(resources.count / limit),
+            resources: resources.rows,
+        };
+        return response
     }
     catch(err){
         error(err.statusCode || 500, err.message || 'Internal server error');

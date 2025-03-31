@@ -42,7 +42,7 @@ const addResource = async (req, res) =>{
 //get all resources with search and pagination
 const getAllResources = async (req, res) => {
     try {
-        const { search, type, state, categoryId } = req.params
+        const { search, type, state, categoryId } = req.query
         const resources = await resourceServices.getResources({ search, type, state, categoryId })
 
         res.status(200).json({ success: true, message: "all resource fetched successfully", data: resources})
