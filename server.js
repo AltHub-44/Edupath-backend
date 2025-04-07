@@ -5,6 +5,9 @@ const authRoutes = require('./src/modules/auth/routes/authRoutes');
 const onboardingRoutes = require('./src/modules/auth/routes/onboardingRoutes');
 const dbConnection = require('./src/database/db')
 const consumeQueues = require('./consumer');
+const mentorRoutes = require("./src/modules/mentors/routes/menteeRoutes");
+const scheduleRoutes = require("./src/modules/mentors/routes/scheduleRoutes");
+const profileRoutes = require("./src/modules/mentors/routes/profileRoutes");
 require('dotenv').config();
 
 const PORT = process.env.PORT
@@ -18,6 +21,10 @@ app.use(express.json())
 app.use('/api', router)
 app.use('/api/auth', authRoutes); 
 app.use('/api/onboarding', onboardingRoutes); 
+
+app.use("/api/mentor/mentees", mentorRoutes);
+app.use("/api/mentor/schedule", scheduleRoutes);
+app.use("/api/mentor/profile", profileRoutes);
 
 
 // Test database connection
