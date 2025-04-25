@@ -6,7 +6,7 @@ const analyticsController = require('../controllers/analyticsControllers')
 const resourceController = require('../controllers/resourceControllers')
 const userController = require('../controllers/userController')
 const { addCategorySchema, addResourceSchema, getResourcesSchema, updateResourceSchema } = require('../validators/resourceValidator')
-
+const { addUserSchema } = require('../validators/userValidator')
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -32,5 +32,6 @@ router.delete('/resource/:id', resourceController.deleteResource)
 
 //---------------------USERS---------------------------------------
 router.get('/user', userController.getAll);
+router.post('/user', validateRquest(addUserSchema), userController.newUser);
 
 module.exports = router
