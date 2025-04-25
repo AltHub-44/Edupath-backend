@@ -15,14 +15,10 @@ router.post('/register', validateRequest(registerSchema), authController.createU
 router.post('/login', validateRequest(loginSchema), authController.loginUser);
 router.post('/recover-password', validateRequest(recoverPasswordSchema), authController.recoverPassword)
 router.post('/reset-password', validateRequest(resetPasswordSchema), authController.resetPassword);
-router.post('/change-password', authMiddleware, validateRequest(changePasswordSchema), authController.changePassword)
+router.post('/change-password', authMiddleware.authenticate, validateRequest(changePasswordSchema), authController.changePassword)
 
 router.get('/google', authController.googleAuth);
 router.get('/google/callback', authController.googleCallback);
-router.get('/user/profile', authMiddleware, authController.getUserProfile);
-
-
-/* router.get('/facebook', authController.facebookAuth);
-router.get('/facebook/callback', authController.facebookCallback); */
+router.get('/user/profile', authMiddleware.authenticate, authController.getUserProfile);
 
 module.exports = router
