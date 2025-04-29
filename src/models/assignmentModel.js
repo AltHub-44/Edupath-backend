@@ -15,10 +15,6 @@ const Assignment = sequelize.define('Assignment', {
         type: DataTypes.TEXT,
         allowNull: false
     },
-    category: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
     mentorId: {
         type: DataTypes.UUID,
         allowNull: false,
@@ -32,14 +28,6 @@ const Assignment = sequelize.define('Assignment', {
         allowNull: false,
         references: {
             model: 'Users',
-            key: 'id'
-        }
-    },
-    templateId: {
-        type: DataTypes.UUID,
-        allowNull: true,
-        references: {
-            model: 'AssignmentTemplates',
             key: 'id'
         }
     },
@@ -60,19 +48,35 @@ const Assignment = sequelize.define('Assignment', {
         allowNull: true
     },
     attachments: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
+        type: DataTypes.JSON,
+        allowNull: true,
         defaultValue: []
     },
-    isGroupAssignment: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
-    },
-    groupId: {
-        type: DataTypes.UUID,
-        allowNull: true
+    submission: {
+        type: DataTypes.JSON,
+        allowNull: true,
+        defaultValue: {
+            content: null,
+            attachments: [],
+            submittedAt: null
+        }
     }
 }, {
-    timestamps: true
+    timestamps: true,
+    indexes: [
+        {
+            fields: ['mentorId']
+        },
+        {
+            fields: ['studentId']
+        },
+        {
+            fields: ['status']
+        },
+        {
+            fields: ['dueDate']
+        }
+    ]
 });
 
 module.exports = Assignment; 

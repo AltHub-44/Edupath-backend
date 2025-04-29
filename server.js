@@ -4,6 +4,7 @@ const router = require('./router')
 const authRoutes = require('./src/modules/auth/routes/authRoutes');
 const onboardingRoutes = require('./src/modules/auth/routes/onboardingRoutes');
 const chatRoutes = require('./src/modules/mentor/routes/chatRoutes');
+const assignmentRoutes = require('./src/modules/mentor/routes/assignmentRoutes');
 const dbConnection = require('./src/database/db')
 const consumeQueues = require('./consumer');
 const websocketService = require('./src/services/websocketService');
@@ -25,6 +26,7 @@ app.use('/api', router)
 app.use('/api/auth', authRoutes); 
 app.use('/api/onboarding', onboardingRoutes); 
 app.use('/api/chat', chatRoutes);
+app.use('/api/assignments', assignmentRoutes);
 
 // Test database connection
 dbConnection
