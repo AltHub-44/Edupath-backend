@@ -4,6 +4,7 @@ const mentorDashboardRoutes = require('../modules/mentor/routes/dashboardRoutes'
 const mentorMenteeRoutes = require('../modules/mentor/routes/menteeRoutes');
 const mentorSessionRoutes = require('../modules/mentor/routes/sessionRoutes');
 const mentorAssignmentRoutes = require('../modules/mentor/routes/assignmentRoutes');
+const mentorResourceRoutes = require('../modules/mentor/routes/resourceRoutes');
 
 // Mentor Dashboard Routes
 router.use('/api/mentor/dashboard', mentorDashboardRoutes);
@@ -16,5 +17,8 @@ router.use('/api/mentor/sessions', mentorSessionRoutes);
 
 // Mentor Assignment Management Routes
 router.use('/api/mentor/assignments', mentorAssignmentRoutes);
+
+// Mentor Resource Management Routes
+router.use('/api/mentor/resources', mentorResourceRoutes);
 
 module.exports = router; 
