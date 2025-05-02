@@ -6,6 +6,7 @@ const adminRoute = require('./src/modules/admin/routes/adminRoutes')
 const studentRoute = require('./src/modules/student/routes/studentRoutes')
 const chatRoutes = require('./src/modules/mentor/routes/chatRoutes');
 const progressRoutes = require('./src/modules/mentor/routes/progressRoutes');
+const { authenticate, adminAuthorize } = require('./src/middlewares/authMiddleware')
 
 router.get('/', (req, res) => {
     res.status(200).json({message: "Welcome to Edupath Backend, please redirect to /api"})
@@ -13,7 +14,7 @@ router.get('/', (req, res) => {
 
 router.use('/auth', authRoute)
 router.use('/quote', quoteRouter)
-router.use('/admin', adminRoute)
+router.use('/admin', authenticate, adminAuthorize, adminRoute)
 router.use('/student', studentRoute)
 router.use('/api/chat', chatRoutes)
 router.use('/api/progress', progressRoutes)
