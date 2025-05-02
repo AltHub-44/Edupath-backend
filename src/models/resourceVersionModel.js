@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const sequelize = require('../database/db');
 
 const ResourceVersion = sequelize.define('ResourceVersion', {
     id: {

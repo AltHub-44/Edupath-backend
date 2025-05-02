@@ -11,7 +11,7 @@ const websocketService = require('./src/services/websocketService');
 const http = require('http');
 require('dotenv').config();
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3000;
 
 const app = express()
 const server = http.createServer(app);
@@ -21,6 +21,7 @@ websocketService.initialize(server);
 
 app.use(cors())
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', router)
 app.use('/api/auth', authRoutes); 
@@ -42,6 +43,15 @@ dbConnection
 
 consumeQueues();
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    success: false,
+    message: 'Something went wrong!'
+  });
+});
+
 server.listen(PORT, () => {
-    console.log(`Server running on port http://localhost:${PORT}`)
+    console.log(`Server is running on port ${PORT}`)
 })
