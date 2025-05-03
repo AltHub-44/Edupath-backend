@@ -12,6 +12,7 @@ const getUserProfile = require('../controller/authControllers');
 const router = express.Router();
 
 router.post('/register', validateRequest(registerSchema), authController.createUser);
+router.post('/mentor/register', validateRequest(registerSchema), authController.createMentor);
 router.post('/login', validateRequest(loginSchema), authController.loginUser);
 router.post('/recover-password', validateRequest(recoverPasswordSchema), authController.recoverPassword)
 router.post('/reset-password', validateRequest(resetPasswordSchema), authController.resetPassword);
