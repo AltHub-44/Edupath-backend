@@ -28,6 +28,32 @@ const registerUser = async (userData) => {
         error(err.statusCode || 500, err.message || 'Internal server error')
     }
   };
+
+
+  const registerMentor = async (userData) => {
+    try {
+        const { firstName, lastName, email, password } = userData;
+
+        const existingUser = await User.findOne({ where: { email } });
+        if (existingUser) error(401, 'User already exists')
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = await User.create({
+            firstName,
+            lastName,
+            email,
+            role: "mentor",
+            password: hashedPassword,
+  
+        });
+        const token = await generateToken(newUser);
+
+        return (token);
+    } catch (err) {
+        error(err.statusCode || 500, err.message || 'Internal server error')
+    }
+  };
   
 
 const loginUser = async (email, password) => {
@@ -153,6 +179,7 @@ const googleAuthService = async (payload) => {
 
 module.exports = {
     registerUser,
+    registerMentor,
     loginUser,
     recoverPassword,
     resetPassword,

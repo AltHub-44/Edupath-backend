@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const  User  = require('../models/userModel'); // Ensure the correct path
 
-const authMiddleware = async (req, res, next) => {
+const authenticate = async (req, res, next) => {
     try {
         const token = req.header('Authorization')?.split(' ')[1]; // Expect "Bearer <token>"
         if (!token) {
@@ -23,5 +23,26 @@ const authMiddleware = async (req, res, next) => {
     }
 };
 
+const adminAuthorize = (req, res, next) => {
+    try{
+        const user = req.user;
+        if(!user){
+            return res.status(401).json( { success: false, message: "Invalid token, Please login to continue"} );
+        }
 
-module.exports = authMiddleware;
+        const role = user.role;
+        if(role !== 'admin'){
+            return res.status(403).json({ success: false, message: "Unauthorized" });
+        }
+        next();
+    }
+    catch(err){
+        return res.status(500).json({ success: false, message: "Internal server error" });
+    }
+}
+
+
+module.exports = {
+    authenticate,
+    adminAuthorize
+}
