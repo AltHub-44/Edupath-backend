@@ -4,7 +4,7 @@ const chatController = require('../controllers/chatController');
 const authMiddleware = require('../../../middlewares/authMiddleware');
 
 // Apply auth middleware to all routes
-router.use(authMiddleware);
+router.use(authMiddleware.authenticate);
 
 // Get chat history with a student
 router.get('/history/:studentId', chatController.getChatHistory);
