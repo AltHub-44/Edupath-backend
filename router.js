@@ -8,6 +8,8 @@ const chatRoutes = require('./src/modules/mentor/routes/chatRoutes');
 const progressRoutes = require('./src/modules/mentor/routes/progressRoutes');
 const { authenticate, adminAuthorize } = require('./src/middlewares/authMiddleware')
 
+
+
 router.get('/', (req, res) => {
     res.status(200).json({message: "Welcome to Edupath Backend, please redirect to /api"})
 })

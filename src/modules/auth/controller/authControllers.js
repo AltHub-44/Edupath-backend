@@ -22,6 +22,18 @@ const createUser = async (req, res) => {
   }
 };
 
+const createMentor = async (req, res) => {
+  try {
+    const { firstName, lastName, email, password } = req.body;
+
+    const token = await authServices.registerMentor({ firstName, lastName, email, password });
+
+    res.status(201).json({ success: true, message: 'Mentor registration successful.', token });
+  } catch (err) {
+    res.status(err.statusCode).json({ success: false, message: err.message});
+  }
+};
+
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -138,6 +150,7 @@ const getUserProfile = async (req, res) => {
 
 module.exports = {
   createUser,
+  createMentor,
   loginUser,
   recoverPassword,
   resetPassword,
