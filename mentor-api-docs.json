@@ -1,0 +1,1076 @@
+{
+  "info": {
+    "name": "EduPath Mentor API",
+    "description": "API documentation for the mentor module of EduPath Learning System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Get Dashboard Overview",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/mentor/dashboard/overview",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "dashboard", "overview"]
+            },
+            "description": "Get an overview of the mentor's dashboard including key metrics and recent activities"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/mentor/dashboard/overview"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"status\": \"success\",\n    \"data\": {\n        \"totalMentees\": 5,\n        \"upcomingSessions\": 3,\n        \"pendingAssignments\": 2,\n        \"recentActivities\": [\n            {\n                \"type\": \"session\",\n                \"title\": \"Web Development Basics\",\n                \"date\": \"2024-03-20T10:00:00Z\",\n                \"menteeName\": \"John Doe\"\n            },\n            {\n                \"type\": \"assignment\",\n                \"title\": \"HTML/CSS Project\",\n                \"date\": \"2024-03-19T15:30:00Z\",\n                \"menteeName\": \"Jane Smith\"\n            }\n        ]\n    }\n}"
+              }
+            },
+            {
+              "name": "Error Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer invalid_token"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/mentor/dashboard/overview"
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"status\": \"error\",\n    \"message\": \"Unauthorized access\",\n    \"code\": \"AUTH_ERROR\"\n}"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Mentee Management",
+      "item": [
+        {
+          "name": "Get All Mentees",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/mentor/mentees",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "mentees"]
+            },
+            "description": "Retrieve a list of all mentees assigned to the mentor"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/mentor/mentees"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"status\": \"success\",\n    \"data\": [\n        {\n            \"id\": \"mentee_123\",\n            \"name\": \"John Doe\",\n            \"email\": \"john@example.com\",\n            \"progress\": 75,\n            \"lastSession\": \"2024-03-19T14:00:00Z\",\n            \"nextSession\": \"2024-03-22T10:00:00Z\"\n        },\n        {\n            \"id\": \"mentee_124\",\n            \"name\": \"Jane Smith\",\n            \"email\": \"jane@example.com\",\n            \"progress\": 60,\n            \"lastSession\": \"2024-03-18T15:30:00Z\",\n            \"nextSession\": \"2024-03-21T11:00:00Z\"\n        }\n    ]\n}"
+              }
+            },
+            {
+              "name": "Error Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/mentor/mentees"
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"status\": \"error\",\n    \"message\": \"No mentees found\",\n    \"code\": \"NOT_FOUND\"\n}"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Mentee Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/mentor/mentees/:menteeId",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "mentees", ":menteeId"],
+              "variable": [
+                {
+                  "key": "menteeId",
+                  "value": "",
+                  "description": "ID of the mentee"
+                }
+              ]
+            },
+            "description": "Get detailed information about a specific mentee"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/mentor/mentees/mentee_123"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": \"mentee_123\",\n        \"name\": \"John Doe\",\n        \"email\": \"john@example.com\",\n        \"phone\": \"+1234567890\",\n        \"joinDate\": \"2024-01-15T00:00:00Z\",\n        \"progress\": 75,\n        \"learningPath\": \"Web Development\",\n        \"completedMilestones\": 8,\n        \"totalMilestones\": 12,\n        \"lastSession\": {\n            \"date\": \"2024-03-19T14:00:00Z\",\n            \"topic\": \"React Hooks\",\n            \"duration\": 60\n        },\n        \"nextSession\": {\n            \"date\": \"2024-03-22T10:00:00Z\",\n            \"topic\": \"State Management\",\n            \"duration\": 60\n        }\n    }\n}"
+              }
+            },
+            {
+              "name": "Error Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/mentor/mentees/invalid_id"
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"status\": \"error\",\n    \"message\": \"Mentee not found\",\n    \"code\": \"NOT_FOUND\"\n}"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Mentee Progress",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/mentor/mentees/:menteeId/progress",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "mentees", ":menteeId", "progress"],
+              "variable": [
+                {
+                  "key": "menteeId",
+                  "value": "",
+                  "description": "ID of the mentee"
+                }
+              ]
+            },
+            "description": "Get the progress tracking information for a specific mentee"
+          }
+        },
+        {
+          "name": "Add Progress Update",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"milestone\": \"string\",\n    \"description\": \"string\",\n    \"status\": \"completed|in_progress|pending\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/mentor/mentees/:menteeId/progress",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "mentees", ":menteeId", "progress"],
+              "variable": [
+                {
+                  "key": "menteeId",
+                  "value": "",
+                  "description": "ID of the mentee"
+                }
+              ]
+            },
+            "description": "Add a new progress update for a mentee"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Session Management",
+      "item": [
+        {
+          "name": "Get Calendar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/mentor/sessions/calendar",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "sessions", "calendar"]
+            },
+            "description": "Get the mentor's calendar view with all scheduled sessions"
+          }
+        },
+        {
+          "name": "Get Upcoming Sessions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/mentor/sessions/upcoming",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "sessions", "upcoming"]
+            },
+            "description": "Get a list of upcoming sessions"
+          }
+        },
+        {
+          "name": "Get Session History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/mentor/sessions/history",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "sessions", "history"]
+            },
+            "description": "Get the history of past sessions"
+          }
+        },
+        {
+          "name": "Schedule Session",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"menteeId\": \"string\",\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"startTime\": \"datetime\",\n    \"duration\": \"number\",\n    \"type\": \"one_on_one|group\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/mentor/sessions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "sessions"]
+            },
+            "description": "Schedule a new mentoring session"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"menteeId\": \"mentee_123\",\n    \"title\": \"React Hooks Deep Dive\",\n    \"description\": \"Understanding useState and useEffect hooks\",\n    \"startTime\": \"2024-03-25T14:00:00Z\",\n    \"duration\": 60,\n    \"type\": \"one_on_one\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/mentor/sessions"
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": \"session_456\",\n        \"menteeId\": \"mentee_123\",\n        \"title\": \"React Hooks Deep Dive\",\n        \"description\": \"Understanding useState and useEffect hooks\",\n        \"startTime\": \"2024-03-25T14:00:00Z\",\n        \"duration\": 60,\n        \"type\": \"one_on_one\",\n        \"status\": \"scheduled\",\n        \"createdAt\": \"2024-03-20T10:00:00Z\"\n    }\n}"
+              }
+            },
+            {
+              "name": "Error Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"menteeId\": \"invalid_id\",\n    \"title\": \"\",\n    \"startTime\": \"invalid_date\",\n    \"duration\": -1\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/mentor/sessions"
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"status\": \"error\",\n    \"message\": \"Validation failed\",\n    \"errors\": [\n        {\n            \"field\": \"menteeId\",\n            \"message\": \"Invalid mentee ID\"\n        },\n        {\n            \"field\": \"title\",\n            \"message\": \"Title is required\"\n        },\n        {\n            \"field\": \"startTime\",\n            \"message\": \"Invalid date format\"\n        },\n        {\n            \"field\": \"duration\",\n            \"message\": \"Duration must be positive\"\n        }\n    ],\n    \"code\": \"VALIDATION_ERROR\"\n}"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Session",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"startTime\": \"datetime\",\n    \"duration\": \"number\",\n    \"status\": \"scheduled|completed|cancelled\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/mentor/sessions/:sessionId",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "sessions", ":sessionId"],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": "",
+                  "description": "ID of the session to update"
+                }
+              ]
+            },
+            "description": "Update an existing session's details"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Session Templates",
+      "item": [
+        {
+          "name": "Get Session Templates",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/mentor/sessions/templates",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "sessions", "templates"]
+            },
+            "description": "Get all available session templates"
+          }
+        },
+        {
+          "name": "Create Session Template",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"duration\": \"number\",\n    \"type\": \"one_on_one|group\",\n    \"agenda\": [\"string\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/mentor/sessions/templates",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "sessions", "templates"]
+            },
+            "description": "Create a new session template"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Assignment Management",
+      "item": [
+        {
+          "name": "Create Assignment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"dueDate\": \"datetime\",\n    \"menteeId\": \"string\",\n    \"attachments\": [\"string\"],\n    \"requirements\": [\"string\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/mentor/assignments",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "assignments"]
+            },
+            "description": "Create a new assignment for a mentee"
+          }
+        },
+        {
+          "name": "Get Mentor Assignments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/mentor/assignments/mentor",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "assignments", "mentor"]
+            },
+            "description": "Get all assignments created by the mentor"
+          }
+        },
+        {
+          "name": "Grade Assignment",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"grade\": \"number\",\n    \"feedback\": \"string\",\n    \"status\": \"graded|returned_for_revision\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/mentor/assignments/:assignmentId/grade",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "assignments", ":assignmentId", "grade"],
+              "variable": [
+                {
+                  "key": "assignmentId",
+                  "value": "",
+                  "description": "ID of the assignment to grade"
+                }
+              ]
+            },
+            "description": "Grade a submitted assignment"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Resource Management",
+      "item": [
+        {
+          "name": "Create Resource",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"type\": \"document|video|link\",\n    \"url\": \"string\",\n    \"tags\": [\"string\"],\n    \"isPublic\": \"boolean\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/mentor/resources",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "resources"]
+            },
+            "description": "Create a new learning resource"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"React Fundamentals\",\n    \"description\": \"Complete guide to React basics\",\n    \"type\": \"document\",\n    \"url\": \"https://example.com/react-fundamentals\",\n    \"tags\": [\"react\", \"javascript\", \"frontend\"],\n    \"isPublic\": true\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/mentor/resources"
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": \"resource_789\",\n        \"title\": \"React Fundamentals\",\n        \"description\": \"Complete guide to React basics\",\n        \"type\": \"document\",\n        \"url\": \"https://example.com/react-fundamentals\",\n        \"tags\": [\"react\", \"javascript\", \"frontend\"],\n        \"isPublic\": true,\n        \"createdAt\": \"2024-03-20T10:00:00Z\",\n        \"createdBy\": \"mentor_123\"\n    }\n}"
+              }
+            },
+            {
+              "name": "Error Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"\",\n    \"type\": \"invalid_type\",\n    \"url\": \"invalid_url\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/mentor/resources"
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"status\": \"error\",\n    \"message\": \"Validation failed\",\n    \"errors\": [\n        {\n            \"field\": \"title\",\n            \"message\": \"Title is required\"\n        },\n        {\n            \"field\": \"type\",\n            \"message\": \"Invalid resource type\"\n        },\n        {\n            \"field\": \"url\",\n            \"message\": \"Invalid URL format\"\n        }\n    ],\n    \"code\": \"VALIDATION_ERROR\"\n}"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Resources",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/mentor/resources",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "resources"]
+            },
+            "description": "Get all resources created by the mentor"
+          }
+        },
+        {
+          "name": "Get Resource Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/mentor/resources/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "resources", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": "ID of the resource"
+                }
+              ]
+            },
+            "description": "Get detailed information about a specific resource"
+          }
+        },
+        {
+          "name": "Update Resource",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"type\": \"document|video|link\",\n    \"url\": \"string\",\n    \"tags\": [\"string\"],\n    \"isPublic\": \"boolean\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/mentor/resources/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "resources", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": "ID of the resource to update"
+                }
+              ]
+            },
+            "description": "Update an existing resource"
+          }
+        },
+        {
+          "name": "Delete Resource",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/mentor/resources/:id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "resources", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": "ID of the resource to delete"
+                }
+              ]
+            },
+            "description": "Delete a resource"
+          }
+        },
+        {
+          "name": "Share Resource",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"menteeId\": \"string\",\n    \"accessLevel\": \"read|write\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/mentor/resources/:id/share",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "resources", ":id", "share"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "",
+                  "description": "ID of the resource to share"
+                }
+              ]
+            },
+            "description": "Share a resource with a mentee"
+          }
+        },
+        {
+          "name": "Get Shared Resources",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/mentor/resources/shared",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "resources", "shared"]
+            },
+            "description": "Get all resources shared with mentees"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Chat Management",
+      "item": [
+        {
+          "name": "Get Chat History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/mentor/chat/history/:studentId",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "chat", "history", ":studentId"],
+              "variable": [
+                {
+                  "key": "studentId",
+                  "value": "",
+                  "description": "ID of the student"
+                }
+              ]
+            },
+            "description": "Get chat history with a specific student"
+          }
+        },
+        {
+          "name": "Send Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"studentId\": \"string\",\n    \"message\": \"string\",\n    \"attachments\": [\"string\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/mentor/chat/send",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "chat", "send"]
+            },
+            "description": "Send a new message to a student"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"studentId\": \"student_123\",\n    \"message\": \"Great job on the last assignment! Let's discuss your progress in our next session.\",\n    \"attachments\": []\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/mentor/chat/send"
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": \"message_456\",\n        \"studentId\": \"student_123\",\n        \"message\": \"Great job on the last assignment! Let's discuss your progress in our next session.\",\n        \"attachments\": [],\n        \"status\": \"sent\",\n        \"timestamp\": \"2024-03-20T10:00:00Z\"\n    }\n}"
+              }
+            },
+            {
+              "name": "Error Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"studentId\": \"invalid_id\",\n    \"message\": \"\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/mentor/chat/send"
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"status\": \"error\",\n    \"message\": \"Validation failed\",\n    \"errors\": [\n        {\n            \"field\": \"studentId\",\n            \"message\": \"Invalid student ID\"\n        },\n        {\n            \"field\": \"message\",\n            \"message\": \"Message cannot be empty\"\n        }\n    ],\n    \"code\": \"VALIDATION_ERROR\"\n}"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Message Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"status\": \"read|unread\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/mentor/chat/status/:messageId",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "chat", "status", ":messageId"],
+              "variable": [
+                {
+                  "key": "messageId",
+                  "value": "",
+                  "description": "ID of the message"
+                }
+              ]
+            },
+            "description": "Update the status of a message"
+          }
+        },
+        {
+          "name": "Edit Message",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"message\": \"string\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/mentor/chat/edit/:messageId",
+              "host": ["{{base_url}}"],
+              "path": ["api", "mentor", "chat", "edit", ":messageId"],
+              "variable": [
+                {
+                  "key": "messageId",
+                  "value": "",
+                  "description": "ID of the message to edit"
+                }
+              ]
+            },
+            "description": "Edit an existing message"
+          }
+        }
+      ]
+    }
+  ]
+} 
